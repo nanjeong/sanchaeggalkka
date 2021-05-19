@@ -5,13 +5,13 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.location.LocationListener
 import android.location.LocationManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
-import android.widget.Toast
-import androidx.annotation.RequiresApi
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,9 +20,19 @@ import com.example.sanchaeggalkka.databinding.ActivityWeatherBinding
 
 class WeatherActivity : AppCompatActivity() {
 
+    private var lng: Double = 0.0
+    private var lat: Double = 0.0
+
     private lateinit var binding: ActivityWeatherBinding
 
     private lateinit var locationManager: LocationManager
+
+    private val locationListener = LocationListener {
+        fun onLocationChanged(location: Location) {
+            lng = location.longitude
+            lat = location.latitude
+        }
+    }
 
     companion object {
         const val PERMISSION_REQUEST_CODE = 5055
@@ -34,7 +44,9 @@ class WeatherActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        requestLocationPermissions()
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        getUserLocation()
+        Log.i("weatherActivity", "longitude : $lng latitude : $lat")
 
         val size = intent.getStringExtra("size")
 
@@ -54,11 +66,19 @@ class WeatherActivity : AppCompatActivity() {
         }
     }
 
+    private fun getUserLocation() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) requestLocationPermissions()
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0F, locationListener)
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0F, locationListener)
+        }
+    }
+
     private fun requestLocationPermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) return
-        if (checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(
-                arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 PERMISSION_REQUEST_CODE
             )
         }
@@ -74,11 +94,11 @@ class WeatherActivity : AppCompatActivity() {
         when (requestCode) {
             PERMISSION_REQUEST_CODE -> {
                 if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
                         showDialogToGetPermission()
                     } else {
                         requestPermissions(
-                            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                             PERMISSION_REQUEST_CODE
                         )
                     }
