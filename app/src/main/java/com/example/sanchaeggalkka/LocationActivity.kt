@@ -1,13 +1,12 @@
 package com.example.sanchaeggalkka
 
+import android.content.Intent
 import android.content.res.AssetManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
+import android.widget.*
 import com.example.sanchaeggalkka.db.AdministrativeDistrict
 import com.example.sanchaeggalkka.db.DistrictDatabase
 import kotlinx.coroutines.CoroutineScope
@@ -15,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.InputStream
 
-class Location : AppCompatActivity() {
+class LocationActivity : AppCompatActivity() {
 
     private lateinit var spinnerSigungu: Spinner
     private lateinit var spinnerDong: Spinner
@@ -74,6 +73,8 @@ class Location : AppCompatActivity() {
                 id: Long
             ) {
                 selectedDistrict[0] = spinnerSuper.getItemAtPosition(position) as String
+                selectedDistrict[1] = ""
+                selectedDistrict[2] = ""
                 when (spinnerSuper.getItemAtPosition(position)) {
                     "서울특별시" -> setSigunguAdapter(R.array.seoul_array)
                     "부산광역시" -> setSigunguAdapter(R.array.busan_array)
@@ -94,14 +95,10 @@ class Location : AppCompatActivity() {
                     "제주특별자치도" -> setSigunguAdapter(R.array.jeju_array)
                     "이어도" -> {
                         setSigunguAdapter(R.array.mu)
-                        setMuAdapter(R.array.mu)
                     }
                     else -> {
                         selectedDistrict[0] = ""
-                        selectedDistrict[1] = ""
-                        selectedDistrict[2] = ""
                         setSigunguAdapter(R.array.mu)
-                        setMuAdapter(R.array.mu)
                     }
                 }
             }
@@ -121,6 +118,7 @@ class Location : AppCompatActivity() {
                     "서울특별시" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "종로구" -> setDongAdapter(2, 18, district)
                             "중구" -> setDongAdapter(20, 34, district)
@@ -147,11 +145,16 @@ class Location : AppCompatActivity() {
                             "강남구" -> setDongAdapter(382, 403, district)
                             "송파구" -> setDongAdapter(405, 431, district)
                             "강동구" -> setDongAdapter(433, 450, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "부산광역시" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "중구" -> setDongAdapter(453, 461, district)
                             "서구" -> setDongAdapter(463, 475, district)
@@ -169,11 +172,16 @@ class Location : AppCompatActivity() {
                             "수영구" -> setDongAdapter(644, 653, district)
                             "사상구" -> setDongAdapter(655, 666, district)
                             "기장군" -> setDongAdapter(668, 672, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "대구광역시" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "중구" -> setDongAdapter(675, 686, district)
                             "동구" -> setDongAdapter(688, 710, district)
@@ -183,11 +191,16 @@ class Location : AppCompatActivity() {
                             "수성구" -> setDongAdapter(768, 790, district)
                             "달서구" -> setDongAdapter(792, 813, district)
                             "달성군" -> setDongAdapter(815, 823, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "인천광역시" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "중구" -> setDongAdapter(826, 837, district)
                             "동구" -> setDongAdapter(839, 849, district)
@@ -199,49 +212,76 @@ class Location : AppCompatActivity() {
                             "서구" -> setDongAdapter(946, 967, district)
                             "강화군" -> setDongAdapter(969, 981, district)
                             "옹진군" -> setDongAdapter(983, 989, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "광주광역시" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "동구" -> setDongAdapter(991, 1004, district)
                             "서구" -> setDongAdapter(1006, 1023, district)
                             "남구" -> setDongAdapter(1025, 1040, district)
                             "북구" -> setDongAdapter(1042, 1069, district)
                             "광산구" -> setDongAdapter(1071, 1091, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "대전광역시" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "동구" -> setDongAdapter(1094, 1109, district)
                             "중구" -> setDongAdapter(1111, 1127, district)
                             "서구" -> setDongAdapter(1129, 1151, district)
                             "유성구" -> setDongAdapter(1153, 1163, district)
                             "대덕구" -> setDongAdapter(1165, 1176, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "울산광역시" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "중구" -> setDongAdapter(1179, 1191, district)
                             "남구" -> setDongAdapter(1193, 1206, district)
                             "동구" -> setDongAdapter(1208, 1216, district)
                             "북구" -> setDongAdapter(1218, 1225, district)
                             "울주군" -> setDongAdapter(1227, 1238, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "세종특별자치시" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
-                        setDongAdapter(1241, 1260, district)
+                        selectedDistrict[2] = ""
+                        when (spinnerSigungu.getItemAtPosition(position)) {
+                            "세종특별자치시" -> setDongAdapter(1241, 1260, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
+                        }
                     }
                     "경기도" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "수원시 장안구" -> setDongAdapter(1263, 1272, district)
                             "수원시 권선구" -> setDongAdapter(1274, 1285, district)
@@ -285,11 +325,16 @@ class Location : AppCompatActivity() {
                             "연천군" -> setDongAdapter(1827, 1836, district)
                             "가평군" -> setDongAdapter(1838, 1843, district)
                             "양평군" -> setDongAdapter(1845, 1856, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "강원도" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "춘천시" -> setDongAdapter(1859, 1883, district)
                             "원주시" -> setDongAdapter(1885, 1909, district)
@@ -309,11 +354,16 @@ class Location : AppCompatActivity() {
                             "인제군" -> setDongAdapter(2049, 2054, district)
                             "고성군" -> setDongAdapter(2056, 2061, district)
                             "양양군" -> setDongAdapter(2063, 2068, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "충청북도" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "청주시 상당구" -> setDongAdapter(2071, 2083, district)
                             "청주시 서원구" -> setDongAdapter(2085, 2095, district)
@@ -329,11 +379,16 @@ class Location : AppCompatActivity() {
                             "괴산군" -> setDongAdapter(2207, 2217, district)
                             "음성군" -> setDongAdapter(2219, 2227, district)
                             "단양군" -> setDongAdapter(2229, 2236, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "충청남도" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "천안시 동남구" -> setDongAdapter(2239, 2255, district)
                             "천안시 서북구" -> setDongAdapter(2257, 2269, district)
@@ -351,11 +406,16 @@ class Location : AppCompatActivity() {
                             "홍성군" -> setDongAdapter(2429, 2439, district)
                             "예산군" -> setDongAdapter(2441, 2452, district)
                             "태안군" -> setDongAdapter(2454, 2461, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "전라북도" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "전주시 완산구" -> setDongAdapter(2464, 2482, district)
                             "전주시 덕진구" -> setDongAdapter(2484, 2499, district)
@@ -372,11 +432,16 @@ class Location : AppCompatActivity() {
                             "순창군" -> setDongAdapter(2681, 2691, district)
                             "고창군" -> setDongAdapter(2693, 2706, district)
                             "부안군" -> setDongAdapter(2708, 2720, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "전라남도" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "목포시" -> setDongAdapter(2723, 2745, district)
                             "여수시" -> setDongAdapter(2747, 2773, district)
@@ -400,11 +465,16 @@ class Location : AppCompatActivity() {
                             "완도군" -> setDongAdapter(3006, 3017, district)
                             "진도군" -> setDongAdapter(3019, 3025, district)
                             "신안군" -> setDongAdapter(3027, 3040, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "경상북도" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "포항시 남구" -> setDongAdapter(3043, 3056, district)
                             "포항시 북구" -> setDongAdapter(3058, 3072, district)
@@ -430,11 +500,16 @@ class Location : AppCompatActivity() {
                             "봉화군" -> setDongAdapter(3372, 3381, district)
                             "울진군" -> setDongAdapter(3383, 3392, district)
                             "울릉군" -> setDongAdapter(3394, 3397, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "경상남도" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "창원시 의창구" -> setDongAdapter(3400, 3407, district)
                             "창원시 성산구" -> setDongAdapter(3409, 3415, district)
@@ -458,14 +533,23 @@ class Location : AppCompatActivity() {
                             "함양군" -> setDongAdapter(3684, 3694, district)
                             "거창군" -> setDongAdapter(3696, 3707, district)
                             "합천군" -> setDongAdapter(3709, 3725, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     "제주특별자치도" -> {
                         selectedDistrict[1] =
                             spinnerSigungu.getItemAtPosition(position) as String
+                        selectedDistrict[2] = ""
                         when (spinnerSigungu.getItemAtPosition(position)) {
                             "제주시" -> setDongAdapter(3728, 3753, district)
                             "서귀포시" -> setDongAdapter(3755, 3771, district)
+                            else -> {
+                                selectedDistrict[1] = ""
+                                setMuAdapter(R.array.mu)
+                            }
                         }
                     }
                     else -> {
@@ -488,10 +572,20 @@ class Location : AppCompatActivity() {
                 id: Long
             ) {
                 selectedDistrict[2] = spinnerDong.getItemAtPosition(position) as String
+                if (spinnerDong.getItemAtPosition(position) == "읍/면/동") selectedDistrict[2] = ""
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
+        }
+
+        val nextButton = findViewById<TextView>(R.id.next_button)
+        nextButton.setOnClickListener {
+            val sizeIntent = Intent(this, SizeActivity::class.java)
+
+            sizeIntent.putExtra("location", selectedDistrict)
+
+            startActivity(sizeIntent)
         }
     }
 
@@ -504,6 +598,8 @@ class Location : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinnerSigungu.adapter = adapter
         }
+
+        setMuAdapter(R.array.mu)
     }
 
     private fun setDongAdapter(start: Int, end: Int, district: List<AdministrativeDistrict>) {
