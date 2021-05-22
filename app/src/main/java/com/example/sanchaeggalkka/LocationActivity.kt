@@ -581,11 +581,24 @@ class LocationActivity : AppCompatActivity() {
 
         val nextButton = findViewById<TextView>(R.id.next_button)
         nextButton.setOnClickListener {
-            val sizeIntent = Intent(this, SizeActivity::class.java)
+            if (selectedDistrict[0] == "") {
+                Toast.makeText(this, "위치를 설정해주세요", Toast.LENGTH_SHORT).show()
+            } else {
+                val sizeIntent = Intent(this, SizeActivity::class.java)
 
-            sizeIntent.putExtra("location", selectedDistrict)
+                CoroutineScope(Dispatchers.IO).launch {
+                    val getDistrict = db.districtDatabaseDao.get(
+                        selectedDistrict[0],
+                        selectedDistrict[1],
+                        selectedDistrict[2]
+                    )
 
-            startActivity(sizeIntent)
+                    sizeIntent.putExtra("nx", getDistrict?.x ?: 60)
+                    sizeIntent.putExtra("ny", getDistrict?.y ?: 127)
+
+                    startActivity(sizeIntent)
+                }
+            }
         }
     }
 

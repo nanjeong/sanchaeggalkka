@@ -15,13 +15,15 @@ class SizeActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val location = intent.getStringArrayExtra("location")
+        val nx = intent.getIntExtra("nx", 60)
+        val ny = intent.getIntExtra("ny", 127)
 
         binding.small.setOnClickListener {
             val smallIntent = Intent(this, WeatherActivity::class.java)
 
             smallIntent.putExtra("size", "small")
-            smallIntent.putExtra("location", location)
+            smallIntent.putExtra("nx", nx)
+            smallIntent.putExtra("ny", ny)
 
             startActivity(smallIntent)
         }
@@ -30,7 +32,8 @@ class SizeActivity : AppCompatActivity() {
             val mediumIntent = Intent(this, WeatherActivity::class.java)
 
             mediumIntent.putExtra("size", "medium")
-            mediumIntent.putExtra("location", location)
+            mediumIntent.putExtra("nx", nx)
+            mediumIntent.putExtra("ny", ny)
 
             startActivity(mediumIntent)
         }
@@ -39,7 +42,8 @@ class SizeActivity : AppCompatActivity() {
             val largeIntent = Intent(this, WeatherActivity::class.java)
 
             largeIntent.putExtra("size", "large")
-            largeIntent.putExtra("location", location)
+            largeIntent.putExtra("nx", nx)
+            largeIntent.putExtra("ny", ny)
 
             startActivity(largeIntent)
         }
