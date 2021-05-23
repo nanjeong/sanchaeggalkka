@@ -8,16 +8,81 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_outline_info_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/info_detail"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="7dp"
+            android:background="@drawable/info_background"
+            app:layout_constraintEnd_toEndOf="@id/info"
+            app:layout_constraintTop_toBottomOf="@id/info">
+
+            <TextView
+                android:id="@+id/caution"
+                android:layout_width="365dp"
+                android:layout_height="wrap_content"
+                android:text="@string/caution"
+                android:textColor="#5b5b5b"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/source"
+                android:layout_width="365dp"
+                android:layout_height="wrap_content"
+                android:text="@string/source"
+                android:textColor="#5b5b5b"
+                android:layout_marginTop="7dp"
+                app:layout_constraintTop_toBottomOf="@id/caution"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+            <TextView
+                android:id="@+id/weather_src"
+                android:layout_width="365dp"
+                android:layout_height="wrap_content"
+                android:text="@string/weather_src"
+                android:textColor="#5b5b5b"
+                app:layout_constraintTop_toBottomOf="@id/source"
+                app:layout_constraintStart_toStartOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="10dp"
+            android:padding="5dp"
+            android:src="@drawable/ic_baseline_location_on_24"
+            app:layout_constraintEnd_toStartOf="@id/info"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/intro_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="현재 기온"
-            android:textSize="25sp"
             android:layout_marginTop="180dp"
+            android:padding="5dp"
+            android:text="현재 기온"
+            android:textColor="@color/text_color"
+            android:textSize="25sp"
             app:layout_constraintBottom_toTopOf="@id/text_temperature"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,8 +92,9 @@
             android:id="@+id/text_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="50sp"
             android:layout_marginTop="15dp"
+            android:textColor="@color/temperature"
+            android:textSize="50sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/intro_text"
@@ -39,6 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textColor="@color/text_color"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -50,6 +117,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:textColor="@color/text_color"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -63,6 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:textAlignment="center"
+            android:textColor="@color/text_color"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,6 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:textAlignment="center"
+            android:textColor="@color/text_color"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

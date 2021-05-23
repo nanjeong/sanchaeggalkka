@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="위치 등록"
         android:layout_marginBottom="10dp"
-        android:textColor="#434343"
+        android:textColor="@color/text_color"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/location_name"
         app:layout_constraintStart_toStartOf="@id/location_name" />
