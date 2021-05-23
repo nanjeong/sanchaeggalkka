@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -16,6 +17,7 @@
             android:layout_height="wrap_content"
             android:text="현재 기온"
             android:textSize="25sp"
+            android:layout_marginTop="180dp"
             app:layout_constraintBottom_toTopOf="@id/text_temperature"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -25,23 +27,59 @@
             android:id="@+id/text_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="24°C"
             android:textSize="50sp"
+            android:layout_marginTop="15dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/intro_text"
-            app:layout_constraintBottom_toTopOf="@id/explain" />
+            tools:text="24°C" />
 
         <TextView
-            android:id="@+id/explain"
+            android:id="@+id/rain"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="산책가기 딱 좋은 날씨"
+            android:layout_marginTop="10dp"
+            android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@id/text_temperature"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            tools:text="강수형태: 빗방울/눈날림" />
+
+        <TextView
+            android:id="@+id/explain1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_temperature"
+            tools:text="산책가기 딱 좋은 날씨" />
+
+        <TextView
+            android:id="@+id/explain2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/explain1"
+            tools:text="산책가기 딱 좋은 날씨" />
+
+        <TextView
+            android:id="@+id/explain3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/explain2"
+            tools:text="산책가기 딱 좋은 날씨" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

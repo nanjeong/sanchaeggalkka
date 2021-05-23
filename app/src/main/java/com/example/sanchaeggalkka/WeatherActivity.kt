@@ -2,6 +2,7 @@ package com.example.sanchaeggalkka
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import com.example.sanchaeggalkka.databinding.ActivityWeatherBinding
@@ -58,15 +59,27 @@ class WeatherActivity : AppCompatActivity() {
 
         when (size) {
             "small" -> {
-                binding.explain.background =
+                binding.explain1.background =
+                    ResourcesCompat.getDrawable(resources, R.color.small_size, null)
+                binding.explain2.background =
+                    ResourcesCompat.getDrawable(resources, R.color.small_size, null)
+                binding.explain3.background =
                     ResourcesCompat.getDrawable(resources, R.color.small_size, null)
             }
             "medium" -> {
-                binding.explain.background =
+                binding.explain1.background =
+                    ResourcesCompat.getDrawable(resources, R.color.medium_size, null)
+                binding.explain2.background =
+                    ResourcesCompat.getDrawable(resources, R.color.medium_size, null)
+                binding.explain3.background =
                     ResourcesCompat.getDrawable(resources, R.color.medium_size, null)
             }
             "large" -> {
-                binding.explain.background =
+                binding.explain1.background =
+                    ResourcesCompat.getDrawable(resources, R.color.large_size, null)
+                binding.explain2.background =
+                    ResourcesCompat.getDrawable(resources, R.color.large_size, null)
+                binding.explain3.background =
                     ResourcesCompat.getDrawable(resources, R.color.large_size, null)
             }
         }
@@ -84,16 +97,102 @@ class WeatherActivity : AppCompatActivity() {
                     response: Response<WeatherForecast>
                 ) {
                     if (response.isSuccessful) {
-                        Log.i("weather api", response.body()?.response?.body?.items?.item?.get(1).toString())
-                        Log.i("weather api", response.body()?.response?.body?.items?.item?.get(4).toString())
-
-                        binding.textTemperature.text = response.body()?.response?.body?.items?.item?.get(4)?.fcstValue.toString() + "°C"
+                        val weatherInf = response.body()?.response?.body?.items?.item
+                        var temperature = 80
+                        var rain = -1
+                        if (weatherInf != null) {
+                            for (info in weatherInf) {
+                                if (info.category == "T3H") temperature = info.fcstValue.toInt()
+                                if (info.category == "PTY") rain = info.fcstValue.toInt()
+                            }
+                        }
+                        if (temperature != 80 && size != null) {
+                            showInformation(temperature, size)
+                            binding.rain.text = when (rain) {
+                                1 -> "강수형태: 비"
+                                2 -> "강수형태: 진눈깨비"
+                                3 -> "강수형태: 눈"
+                                4 -> "강수형태: 소나기"
+                                5 -> "강수형태: 빗방울"
+                                6 -> "강수형태: 빗방울/눈날림"
+                                else -> ""
+                            }
+                        }
                     }
                 }
 
                 override fun onFailure(call: Call<WeatherForecast>, t: Throwable) {
                     Log.i("weather api", "fail ${t.message}")
+                    Log.i("weather api", "nx: $nx, ny: $ny")
+                    showToast()
                 }
             })
+    }
+
+    private fun showInformation(temperature: Int, size: String) {
+        binding.textTemperature.text = "$temperature°C"
+        when (size) {
+            "small" -> {
+                if (temperature in 10..20) explain(1)
+                else if ((temperature in 21..22) || (temperature in 7..9)) explain(2)
+                else if ((temperature in 23..28) || (-1 <= temperature && temperature < 7)) explain(3)
+                else if ((temperature in 29..31) || (-4 <= temperature && temperature < -1)) explain(4)
+                else if (32 <= temperature) explain(5)
+                else if (temperature < -4) explain(6)
+                else {}
+            }
+            "medium" -> {
+                if (temperature in 10..20) explain(1)
+                else if ((temperature in 21..22) || (temperature in 7..9)) explain(2)
+                else if ((temperature in 23..28) || (-1 < temperature && temperature < 7)) explain(3)
+                else if ((temperature in 29..31) || (-9 <= temperature && temperature < -1)) explain(4)
+                else if (32 <= temperature) explain(5)
+                else if (temperature < -9) explain(6)
+                else {}
+            }
+            "large" -> {
+                if (temperature in 7..17) explain(1)
+                else if ((temperature in 18..20) || (temperature in 4..6)) explain(2)
+                else if ((temperature in 21..25) || (-6 <= temperature && temperature < 4)) explain(3)
+                else if ((temperature in 26..28) || (-9 <= temperature && temperature < -6)) explain(4)
+                else if (29 <= temperature) explain(5)
+                else if (temperature < -9) explain(6)
+                else {}
+            }
+        }
+    }
+
+    private fun explain(no: Int) {
+        when (no) {
+            1 -> {
+                binding.explain2.text = "산책가기 딱 좋은 날씨!"
+            }
+            2 -> {
+                binding.explain2.text = "산책가도 좋아요"
+                binding.explain3.text = "약간 주의가 필요해요"
+            }
+            3 -> {
+                binding.explain2.text = "견종에 따라 안전한 날씨는 아니에요"
+                binding.explain3.text = "밖에 나가면 잘 살펴봐주세요"
+            }
+            4 -> {
+                binding.explain2.text = "산책가기 좋은 날씨가 아니에요"
+                binding.explain3.text = "주의해주세요"
+            }
+            5 -> {
+                binding.explain1.text = "너무 더워요"
+                binding.explain2.text = "생명에 지장을 줄 수 있어요"
+                binding.explain3.text = "장시간 산책은 피해주세요"
+            }
+            6 -> {
+                binding.explain1.text = "너무 추워요"
+                binding.explain2.text = "생명에 지장을 줄 수 있어요"
+                binding.explain3.text = "장시간 산책은 피해주세요"
+            }
+        }
+    }
+
+    private fun showToast() {
+        Toast.makeText(this, "날씨 정보를 가져오는데 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show()
     }
 }
