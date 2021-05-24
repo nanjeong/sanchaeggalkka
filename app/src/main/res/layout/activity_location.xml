@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LocationActivity">
@@ -10,8 +11,8 @@
         android:id="@+id/page_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="위치 등록"
         android:layout_marginBottom="10dp"
+        android:text="위치 등록"
         android:textColor="@color/text_color"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@id/location_name"
@@ -64,11 +65,11 @@
         android:id="@+id/next_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:padding="15dp"
         android:text="Next"
-        android:layout_marginTop="30dp"
         android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/dong"
-        app:layout_constraintEnd_toEndOf="@id/dong"/>
+        app:layout_constraintEnd_toEndOf="@id/dong"
+        app:layout_constraintTop_toBottomOf="@id/dong" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

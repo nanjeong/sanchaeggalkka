@@ -5,10 +5,11 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [AdministrativeDistrict::class], version = 1, exportSchema = false)
+@Database(entities = [AdministrativeDistrict::class, Loc::class], version = 1, exportSchema = false)
 abstract class DistrictDatabase : RoomDatabase() {
 
-    abstract val districtDatabaseDao: DistrictDao
+    abstract val districtDao: DistrictDao
+    abstract val locDao: LocDao
 
     companion object {
         @Volatile

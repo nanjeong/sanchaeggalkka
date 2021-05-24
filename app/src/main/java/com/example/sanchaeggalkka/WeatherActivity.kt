@@ -1,5 +1,6 @@
 package com.example.sanchaeggalkka
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -143,6 +144,12 @@ class WeatherActivity : AppCompatActivity() {
         binding.container.setOnClickListener {
             binding.infoDetail.visibility = View.GONE
             infoDetailFlag = 0
+        }
+
+        binding.location.setOnClickListener {
+            val lcIntent = Intent(this, LocationListActivity::class.java)
+
+            startActivity(lcIntent)
         }
     }
 
