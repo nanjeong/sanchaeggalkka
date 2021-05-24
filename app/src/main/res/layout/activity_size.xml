@@ -4,17 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/jin"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:src="@drawable/jin"
+        app:layout_constraintBottom_toTopOf="@id/small"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed" />
+
     <Button
         android:id="@+id/small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/small_size"
         android:text="소형견"
+        android:layout_marginTop="30dp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/medium"
+        app:layout_constraintBottom_toTopOf="@id/medium"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/jin" />
 
     <Button
         android:id="@+id/medium"
@@ -22,11 +34,12 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/medium_size"
         android:text="중형견"
+        android:layout_marginTop="30dp"
         android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/large"
-        app:layout_constraintStart_toEndOf="@id/small"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/small"
+        app:layout_constraintBottom_toTopOf="@id/large"/>
 
     <Button
         android:id="@+id/large"
@@ -34,10 +47,11 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/large_size"
         android:text="대형견"
+        android:layout_marginTop="30dp"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/medium"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/medium" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

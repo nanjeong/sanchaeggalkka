@@ -152,42 +152,29 @@ class WeatherActivity : AppCompatActivity() {
             "small" -> {
                 if (temperature in 10..20) explain(1)
                 else if ((temperature in 21..22) || (temperature in 7..9)) explain(2)
-                else if ((temperature in 23..28) || (-1 <= temperature && temperature < 7)) explain(
-                    3
-                )
-                else if ((temperature in 29..31) || (-4 <= temperature && temperature < -1)) explain(
-                    4
-                )
+                else if ((temperature in 23..28) || (-1 <= temperature && temperature < 7)) explain(3)
+                else if ((temperature in 29..31) || (-4 <= temperature && temperature < -1)) explain(4)
                 else if (32 <= temperature) explain(5)
                 else if (temperature < -4) explain(6)
-                else {
-                }
+                else {}
             }
             "medium" -> {
                 if (temperature in 10..20) explain(1)
                 else if ((temperature in 21..22) || (temperature in 7..9)) explain(2)
                 else if ((temperature in 23..28) || (-1 < temperature && temperature < 7)) explain(3)
-                else if ((temperature in 29..31) || (-9 <= temperature && temperature < -1)) explain(
-                    4
-                )
+                else if ((temperature in 29..31) || (-9 <= temperature && temperature < -1)) explain(4)
                 else if (32 <= temperature) explain(5)
                 else if (temperature < -9) explain(6)
-                else {
-                }
+                else {}
             }
             "large" -> {
                 if (temperature in 7..17) explain(1)
                 else if ((temperature in 18..20) || (temperature in 4..6)) explain(2)
-                else if ((temperature in 21..25) || (-6 <= temperature && temperature < 4)) explain(
-                    3
-                )
-                else if ((temperature in 26..28) || (-9 <= temperature && temperature < -6)) explain(
-                    4
-                )
+                else if ((temperature in 21..25) || (-6 <= temperature && temperature < 4)) explain(3)
+                else if ((temperature in 26..28) || (-9 <= temperature && temperature < -6)) explain(4)
                 else if (29 <= temperature) explain(5)
                 else if (temperature < -9) explain(6)
-                else {
-                }
+                else {}
             }
         }
     }
