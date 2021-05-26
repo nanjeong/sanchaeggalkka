@@ -1,0 +1,120 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "d1e125a56ce4e697d1c575d4994c745b",
+    "entities": [
+      {
+        "tableName": "district_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name1` TEXT NOT NULL, `name2` TEXT NOT NULL, `name3` TEXT NOT NULL, `x` INTEGER NOT NULL, `y` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name1",
+            "columnName": "name1",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name2",
+            "columnName": "name2",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name3",
+            "columnName": "name3",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "x",
+            "columnName": "x",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "y",
+            "columnName": "y",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "location_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `lcName` TEXT NOT NULL, `name1` TEXT NOT NULL, `name2` TEXT NOT NULL, `name3` TEXT NOT NULL, `x` INTEGER NOT NULL, `y` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lcName",
+            "columnName": "lcName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name1",
+            "columnName": "name1",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name2",
+            "columnName": "name2",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name3",
+            "columnName": "name3",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "x",
+            "columnName": "x",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "y",
+            "columnName": "y",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd1e125a56ce4e697d1c575d4994c745b')"
+    ]
+  }
+}

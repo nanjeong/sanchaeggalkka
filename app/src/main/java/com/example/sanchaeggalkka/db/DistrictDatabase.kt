@@ -5,7 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [AdministrativeDistrict::class, Loc::class], version = 1, exportSchema = false)
+@Database(entities = [AdministrativeDistrict::class, Loc::class], version = 1, exportSchema = true)
 abstract class DistrictDatabase : RoomDatabase() {
 
     abstract val districtDao: DistrictDao
@@ -23,7 +23,9 @@ abstract class DistrictDatabase : RoomDatabase() {
                         context.applicationContext,
                         DistrictDatabase::class.java,
                         "district_database"
-                    ).fallbackToDestructiveMigration().build()
+                    )
+                        .createFromAsset("database/district.db")
+                        .build()
                     INSTANCE = instance
                 }
                 return instance
