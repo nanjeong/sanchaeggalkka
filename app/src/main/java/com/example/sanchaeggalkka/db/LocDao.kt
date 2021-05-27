@@ -1,10 +1,7 @@
 package com.example.sanchaeggalkka.db
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface LocDao {
@@ -22,4 +19,7 @@ interface LocDao {
 
     @Query("SELECT lcName FROM location_table")
     fun getName(): LiveData<List<String>>
+
+    @Delete
+    suspend fun delete(loc: Loc)
 }

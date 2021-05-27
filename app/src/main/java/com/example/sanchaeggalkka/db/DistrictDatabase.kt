@@ -25,6 +25,7 @@ abstract class DistrictDatabase : RoomDatabase() {
                         "district_database"
                     )
                         .createFromAsset("database/district.db")
+                        .fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
                 }

@@ -590,7 +590,8 @@ class LocationActivity : AppCompatActivity() {
                             name2 = selectedDistrict[1],
                             name3 = selectedDistrict[2],
                             x = getDistrict?.x ?: 60,
-                            y = getDistrict?.y ?: 127
+                            y = getDistrict?.y ?: 127,
+                            current = 1
                         )
 
                         db.locDao.insert(lc)
