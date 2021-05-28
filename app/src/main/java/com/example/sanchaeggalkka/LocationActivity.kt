@@ -1,5 +1,6 @@
 package com.example.sanchaeggalkka
 
+import android.content.Context
 import android.content.Intent
 import android.content.res.AssetManager
 import androidx.appcompat.app.AppCompatActivity
@@ -578,12 +579,13 @@ class LocationActivity : AppCompatActivity() {
                 } else {
                     val sizeIntent = Intent(application, SizeActivity::class.java)
 
-                    val job1 = CoroutineScope(Dispatchers.IO).launch {
+                    CoroutineScope(Dispatchers.IO).launch {
                         val getDistrict = db.districtDao.get(
                             selectedDistrict[0],
                             selectedDistrict[1],
                             selectedDistrict[2]
                         )
+
                         val lc = Loc(
                             lcName = lcName.text.toString(),
                             name1 = selectedDistrict[0],
@@ -593,12 +595,15 @@ class LocationActivity : AppCompatActivity() {
                             y = getDistrict?.y ?: 127,
                             current = 1
                         )
-
                         db.locDao.insert(lc)
-                        Log.i("locDaoo", "${db.locDao.get(lcName.text.toString())}")
 
-                        sizeIntent.putExtra("nx", getDistrict?.x ?: 60)
-                        sizeIntent.putExtra("ny", getDistrict?.y ?: 127)
+                        val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
+                        val editorX = spX.edit()
+                        editorX.putInt("nx", getDistrict?.x ?: 60)
+
+                        val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
+                        val editorY = spY.edit()
+                        editorY.putInt("ny", getDistrict?.y ?: 127)
 
                         startActivity(sizeIntent)
                     }

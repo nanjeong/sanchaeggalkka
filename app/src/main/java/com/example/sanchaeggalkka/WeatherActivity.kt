@@ -1,5 +1,6 @@
 package com.example.sanchaeggalkka
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -27,8 +28,13 @@ class WeatherActivity : AppCompatActivity() {
         setContentView(view)
 
         val size = intent.getStringExtra("size")
-        val nx = intent.getIntExtra("nx", 60)
-        val ny = intent.getIntExtra("ny", 127)
+
+        val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
+        val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
+
+        val nx = spX.getInt("nx", 60)
+        val ny = spY.getInt("ny", 127)
+
         val currTime = System.currentTimeMillis()
         val date = Date(currTime)
         val today = SimpleDateFormat("yyyyMMdd HH").format(date)

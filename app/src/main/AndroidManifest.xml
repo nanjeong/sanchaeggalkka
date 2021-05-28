@@ -14,8 +14,9 @@
         android:theme="@style/Theme.SanchaegGalkka"
         android:usesCleartextTraffic="true">
         <activity android:name=".LocationListActivity"></activity>
+        <activity android:name=".LocationActivity"></activity>
         <activity
-            android:name=".LocationActivity"
+            android:name=".SizeActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -23,7 +24,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SizeActivity"></activity>
         <activity android:name=".WeatherActivity" />
     </application>
 

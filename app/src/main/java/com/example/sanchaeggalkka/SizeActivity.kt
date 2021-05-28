@@ -1,5 +1,6 @@
 package com.example.sanchaeggalkka
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -15,15 +16,22 @@ class SizeActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val nx = intent.getIntExtra("nx", 60)
-        val ny = intent.getIntExtra("ny", 127)
+        val sharedPreferences = getSharedPreferences("checkFirst", Context.MODE_PRIVATE)
+        val value = sharedPreferences.getBoolean("first", false)
+        if (!value) {
+            val editor = sharedPreferences.edit()
+            editor.putBoolean("first", true)
+            editor.commit()
+
+            val locationIntent = Intent(this, LocationActivity::class.java)
+
+            startActivity(locationIntent)
+        }
 
         binding.small.setOnClickListener {
             val smallIntent = Intent(this, WeatherActivity::class.java)
 
             smallIntent.putExtra("size", "small")
-            smallIntent.putExtra("nx", nx)
-            smallIntent.putExtra("ny", ny)
 
             startActivity(smallIntent)
         }
@@ -32,8 +40,6 @@ class SizeActivity : AppCompatActivity() {
             val mediumIntent = Intent(this, WeatherActivity::class.java)
 
             mediumIntent.putExtra("size", "medium")
-            mediumIntent.putExtra("nx", nx)
-            mediumIntent.putExtra("ny", ny)
 
             startActivity(mediumIntent)
         }
@@ -42,8 +48,6 @@ class SizeActivity : AppCompatActivity() {
             val largeIntent = Intent(this, WeatherActivity::class.java)
 
             largeIntent.putExtra("size", "large")
-            largeIntent.putExtra("nx", nx)
-            largeIntent.putExtra("ny", ny)
 
             startActivity(largeIntent)
         }
