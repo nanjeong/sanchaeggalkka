@@ -14,8 +14,8 @@ interface LocDao {
     @Query("SELECT * FROM location_table")
     fun getAllLocation(): LiveData<List<Loc>>
 
-    @Query("SELECT * FROM location_table WHERE lcName = :key")
-    suspend fun get(key: String): Loc
+    @Query("SELECT * FROM location_table WHERE id = :key")
+    suspend fun get(key: Long): Loc
 
     @Query("SELECT lcName FROM location_table")
     fun getName(): LiveData<List<String>>

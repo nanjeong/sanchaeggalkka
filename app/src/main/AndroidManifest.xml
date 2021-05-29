@@ -13,8 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SanchaegGalkka"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LocationListActivity"></activity>
-        <activity android:name=".LocationActivity"></activity>
+        <activity android:name=".LocationDetailActivity"></activity>
+        <activity android:name=".LocationListActivity" />
+        <activity android:name=".LocationActivity" />
         <activity
             android:name=".SizeActivity"
             android:screenOrientation="portrait">

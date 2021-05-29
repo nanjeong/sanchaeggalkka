@@ -12,6 +12,5 @@ data class Loc(
     val name2: String,
     val name3: String,
     val x: Int,
-    val y: Int,
-    val current: Int
+    val y: Int
 )

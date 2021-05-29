@@ -52,4 +52,5 @@ class SizeActivity : AppCompatActivity() {
             startActivity(largeIntent)
         }
     }
+
 }

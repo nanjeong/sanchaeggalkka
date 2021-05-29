@@ -1,6 +1,7 @@
 package com.example.sanchaeggalkka.db
 
 import android.content.Context
+import android.util.Log
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -25,7 +26,6 @@ abstract class DistrictDatabase : RoomDatabase() {
                         "district_database"
                     )
                         .createFromAsset("database/district.db")
-                        .fallbackToDestructiveMigration()
                         .build()
                     INSTANCE = instance
                 }

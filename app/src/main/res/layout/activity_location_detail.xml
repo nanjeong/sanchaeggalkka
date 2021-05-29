@@ -2,36 +2,30 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LocationActivity">
+    tools:context=".LocationDetailActivity">
 
     <TextView
-        android:id="@+id/page_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="위치 등록"
+        android:paddingStart="15dp"
         android:textColor="@color/text_color"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@id/location_name"
-        app:layout_constraintStart_toStartOf="@id/location_name" />
-
-    <EditText
         android:id="@+id/location_name"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_marginBottom="30dp"
-        android:hint="위치 이름을 작성해주세요 ( ex 우리집 )"
         app:layout_constraintBottom_toTopOf="@id/super_district"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.36"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        android:textSize="17sp"
+        android:gravity="center_vertical"
+        tools:text="우리집"/>
 
-    <Spinner
+    <TextView
+        android:paddingStart="15dp"
+        android:textColor="@color/text_color"
         android:id="@+id/super_district"
         android:layout_width="300dp"
         android:layout_height="45dp"
@@ -40,9 +34,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/location_name" />
+        app:layout_constraintTop_toBottomOf="@id/location_name"
+        android:textSize="17sp"
+        android:gravity="center_vertical"
+        tools:text="서울시"/>
 
-    <Spinner
+    <TextView
+        android:paddingStart="15dp"
+        android:textColor="@color/text_color"
         android:id="@+id/sigungu"
         android:layout_width="300dp"
         android:layout_height="45dp"
@@ -50,44 +49,37 @@
         app:layout_constraintBottom_toTopOf="@id/dong"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/super_district" />
+        app:layout_constraintTop_toBottomOf="@id/super_district"
+        android:textSize="17sp"
+        android:gravity="center_vertical"
+        tools:text="마포구"/>
 
-    <Spinner
+    <TextView
+        android:paddingStart="15dp"
+        android:textColor="@color/text_color"
         android:id="@+id/dong"
         android:layout_width="300dp"
         android:layout_height="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sigungu" />
+        app:layout_constraintTop_toBottomOf="@id/sigungu"
+        android:textSize="17sp"
+        android:gravity="center_vertical"
+        tools:text="신수동"/>
 
     <TextView
-        android:id="@+id/next_button"
+        android:id="@+id/update_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:paddingTop="15dp"
         android:paddingStart="15dp"
         android:paddingBottom="15dp"
-        android:text="다음"
-        android:textColor="@color/text_button"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="@id/dong"
-        app:layout_constraintTop_toBottomOf="@id/dong" />
-
-    <TextView
-        android:id="@+id/save_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:paddingTop="15dp"
-        android:paddingStart="15dp"
-        android:paddingBottom="15dp"
-        android:text="저장"
+        android:text="수정"
         android:textSize="16sp"
         android:textColor="@color/text_button"
         app:layout_constraintEnd_toEndOf="@id/dong"
-        app:layout_constraintTop_toBottomOf="@id/dong"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toBottomOf="@id/dong"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

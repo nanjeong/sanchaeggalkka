@@ -2,23 +2,19 @@ package com.example.sanchaeggalkka
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.AssetManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.lifecycle.ViewModelProvider
 import com.example.sanchaeggalkka.databinding.ActivityLocationBinding
 import com.example.sanchaeggalkka.db.AdministrativeDistrict
 import com.example.sanchaeggalkka.db.DistrictDatabase
 import com.example.sanchaeggalkka.db.Loc
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.io.BufferedReader
-import java.io.InputStream
-import kotlin.coroutines.CoroutineContext
 
 class LocationActivity : AppCompatActivity() {
 
@@ -30,11 +26,31 @@ class LocationActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val db = DistrictDatabase.getInstance(this)
         val selectedDistrict: Array<String> = Array(3) { "" }
         var district: List<AdministrativeDistrict> = listOf()
         val lcName = findViewById<EditText>(R.id.location_name)
-        val application = requireNotNull(this)
+        val application = requireNotNull(this).application
+        val db = DistrictDatabase.getInstance(application)
+
+        val start = intent.getStringExtra("start")
+
+        if (start == "locationList" || start == "locationDetail") {
+            binding.nextButton.visibility = View.INVISIBLE
+            binding.saveButton.visibility = View.VISIBLE
+        } else {
+            binding.nextButton.visibility = View.VISIBLE
+            binding.saveButton.visibility = View.INVISIBLE
+        }
+
+        if (start == "locationDetail") {
+            binding.pageName.text = "위치 수정"
+
+            val lcName = intent.getStringExtra("lcName")
+
+            lcName?.let {
+                binding.locationName.setText(lcName)
+            }
+        }
 
         CoroutineScope(Dispatchers.Main).launch {
             val job = CoroutineScope(Dispatchers.IO).launch {
@@ -570,15 +586,12 @@ class LocationActivity : AppCompatActivity() {
                 }
             }
 
-            val nextButton = findViewById<TextView>(R.id.next_button)
-            nextButton.setOnClickListener {
+            binding.nextButton.setOnClickListener {
                 if (selectedDistrict[0] == "") {
                     Toast.makeText(application, "위치를 설정해주세요", Toast.LENGTH_SHORT).show()
                 } else if (lcName.text.toString() == "") {
                     Toast.makeText(application, "위치 이름을 작성해주세요.", Toast.LENGTH_SHORT).show()
                 } else {
-                    val sizeIntent = Intent(application, SizeActivity::class.java)
-
                     CoroutineScope(Dispatchers.IO).launch {
                         val getDistrict = db.districtDao.get(
                             selectedDistrict[0],
@@ -592,20 +605,108 @@ class LocationActivity : AppCompatActivity() {
                             name2 = selectedDistrict[1],
                             name3 = selectedDistrict[2],
                             x = getDistrict?.x ?: 60,
-                            y = getDistrict?.y ?: 127,
-                            current = 1
+                            y = getDistrict?.y ?: 127
                         )
                         db.locDao.insert(lc)
 
                         val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
                         val editorX = spX.edit()
                         editorX.putInt("nx", getDistrict?.x ?: 60)
+                        editorX.commit()
 
                         val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
                         val editorY = spY.edit()
                         editorY.putInt("ny", getDistrict?.y ?: 127)
+                        editorY.commit()
+
+                        val sizeIntent = Intent(application, SizeActivity::class.java)
 
                         startActivity(sizeIntent)
+                    }
+                }
+            }
+
+            binding.saveButton.setOnClickListener {
+                if (selectedDistrict[0] == "") {
+                    Toast.makeText(application, "위치를 설정해주세요", Toast.LENGTH_SHORT).show()
+                } else if (lcName.text.toString() == "") {
+                    Toast.makeText(application, "위치 이름을 작성해주세요.", Toast.LENGTH_SHORT).show()
+                } else {
+                    if (start == "locationList") { // ADD로 들어옴
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val getDistrict = db.districtDao.get(
+                                selectedDistrict[0],
+                                selectedDistrict[1],
+                                selectedDistrict[2]
+                            )
+
+                            val lc = Loc(
+                                lcName = lcName.text.toString(),
+                                name1 = selectedDistrict[0],
+                                name2 = selectedDistrict[1],
+                                name3 = selectedDistrict[2],
+                                x = getDistrict?.x ?: 60,
+                                y = getDistrict?.y ?: 127
+                            )
+                            db.locDao.insert(lc)
+
+                            val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
+                            val editorX = spX.edit()
+                            editorX.putInt("nx", getDistrict?.x ?: 60)
+                            editorX.commit()
+
+                            val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
+                            val editorY = spY.edit()
+                            editorY.putInt("ny", getDistrict?.y ?: 127)
+                            editorY.commit()
+
+                            onBackPressed()
+                        }
+                    } else { // 수정으로 들어옴
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val getDistrict = db.districtDao.get(
+                                selectedDistrict[0],
+                                selectedDistrict[1],
+                                selectedDistrict[2]
+                            )
+
+                            val id = intent.getLongExtra("id", -1)
+
+                            val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
+                            val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
+
+                            val nx = spX.getInt("nx", 0)
+                            val ny = spY.getInt("ny", 0)
+
+                            var IscurrentLoc = false
+                            val currentLoc = db.locDao.get(id)
+                            if (currentLoc.x == nx && currentLoc.y == ny) {
+                                IscurrentLoc = true
+                            }
+                            val lc = Loc(
+                                id,
+                                lcName.text.toString(),
+                                selectedDistrict[0],
+                                selectedDistrict[1],
+                                selectedDistrict[2],
+                                getDistrict?.x ?: 60,
+                                getDistrict?.y ?: 127
+                            )
+                            db.locDao.update(lc)
+
+                            if (IscurrentLoc) {
+                                val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
+                                val editorX = spX.edit()
+                                editorX.putInt("nx", getDistrict?.x ?: 60)
+                                editorX.commit()
+
+                                val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
+                                val editorY = spY.edit()
+                                editorY.putInt("ny", getDistrict?.y ?: 127)
+                                editorY.commit()
+                            }
+                            onBackPressed()
+                        }
                     }
                 }
             }
