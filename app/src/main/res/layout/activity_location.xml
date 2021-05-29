@@ -66,9 +66,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:paddingTop="15dp"
-        android:paddingStart="15dp"
-        android:paddingBottom="15dp"
+        android:background="@drawable/button_background"
+        android:padding="15dp"
         android:text="다음"
         android:textColor="@color/text_button"
         android:textSize="16sp"
@@ -80,14 +79,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:paddingTop="15dp"
-        android:paddingStart="15dp"
-        android:paddingBottom="15dp"
+        android:background="@drawable/button_background"
+        android:padding="15dp"
         android:text="저장"
-        android:textSize="16sp"
         android:textColor="@color/text_button"
+        android:textSize="16sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@id/dong"
-        app:layout_constraintTop_toBottomOf="@id/dong"
-        android:visibility="invisible"/>
+        app:layout_constraintTop_toBottomOf="@id/dong" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

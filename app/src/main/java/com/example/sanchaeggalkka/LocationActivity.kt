@@ -659,9 +659,8 @@ class LocationActivity : AppCompatActivity() {
                             val editorY = spY.edit()
                             editorY.putInt("ny", getDistrict?.y ?: 127)
                             editorY.commit()
-
-                            onBackPressed()
                         }
+                        Toast.makeText(application, "위치를 추가했습니다.", Toast.LENGTH_SHORT).show()
                     } else { // 수정으로 들어옴
                         CoroutineScope(Dispatchers.IO).launch {
                             val getDistrict = db.districtDao.get(
@@ -683,6 +682,7 @@ class LocationActivity : AppCompatActivity() {
                             if (currentLoc.x == nx && currentLoc.y == ny) {
                                 IscurrentLoc = true
                             }
+
                             val lc = Loc(
                                 id,
                                 lcName.text.toString(),
@@ -705,8 +705,8 @@ class LocationActivity : AppCompatActivity() {
                                 editorY.putInt("ny", getDistrict?.y ?: 127)
                                 editorY.commit()
                             }
-                            onBackPressed()
                         }
+                        Toast.makeText(application, "위치를 수정했습니다.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
