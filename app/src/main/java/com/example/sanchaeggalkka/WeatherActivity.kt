@@ -4,11 +4,13 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import com.example.sanchaeggalkka.databinding.ActivityWeatherBinding
+import com.skydoves.balloon.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -136,27 +138,31 @@ class WeatherActivity : AppCompatActivity() {
                 }
             })
 
-        var infoDetailFlag = 0 // visibility == gone
-        binding.info.setOnClickListener {
-            if (infoDetailFlag == 0) {
-                binding.infoDetail.visibility = View.VISIBLE
-                infoDetailFlag = 1 // visibility == visible
-            } else if (infoDetailFlag == 1) {
-                binding.infoDetail.visibility = View.GONE
-                infoDetailFlag = 0
-            }
-        }
-
-        binding.container.setOnClickListener {
-            binding.infoDetail.visibility = View.GONE
-            infoDetailFlag = 0
-        }
-
         binding.location.setOnClickListener {
             val lcIntent = Intent(this, LocationListActivity::class.java)
 
             startActivity(lcIntent)
         }
+
+        val balloon = Balloon.Builder(this)
+            .setArrowSize(10)
+            .setPadding(8)
+            .setTextSize(15f)
+            .setMarginRight(10)
+            .setBackgroundColor(ContextCompat.getColor(this, R.color.info_background))
+            .setArrowColor(ContextCompat.getColor(this, R.color.info_background))
+            .setTextColor(ContextCompat.getColor(this, R.color.white))
+            .setCornerRadius(6f)
+            .setText("견종, 나이(6개월 미만, 노견), 비만 여부에 따라 추위, 더위를 느끼는 정도에 차이가 있을 수 있습니다. 앱의 정보는 참고용으로 사용해주세요.\n\n출처:The Tufts Animal Care and Condition (TACC) scales\n날씨 정보: 기상청")
+            .setArrowOrientation(ArrowOrientation.TOP)
+            .setArrowPosition(0.95f)
+            .setTextGravity(Gravity.START)
+            .build()
+
+        binding.info.setOnClickListener {
+            balloon.showAlignBottom(binding.info)
+        }
+
     }
 
     private fun showInformation(temperature: Int, size: String) {

@@ -13,4 +13,5 @@
     <color name="text_color">#323232</color>
     <color name="temperature">#3A3A3A</color>
     <color name="text_button">#353535</color>
+    <color name="info_background">#5B5B5B</color>
 </resources>
