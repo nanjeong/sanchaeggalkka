@@ -609,15 +609,11 @@ class LocationActivity : AppCompatActivity() {
                         )
                         db.locDao.insert(lc)
 
-                        val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
-                        val editorX = spX.edit()
-                        editorX.putInt("nx", getDistrict?.x ?: 60)
-                        editorX.commit()
-
-                        val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
-                        val editorY = spY.edit()
-                        editorY.putInt("ny", getDistrict?.y ?: 127)
-                        editorY.commit()
+                        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                        val editor = sp.edit()
+                        editor.putInt("nx", getDistrict?.x ?: 0)
+                        editor.putInt("ny", getDistrict?.y ?: 0)
+                        editor.commit()
 
                         val sizeIntent = Intent(application, SizeActivity::class.java)
 
@@ -650,15 +646,11 @@ class LocationActivity : AppCompatActivity() {
                             )
                             db.locDao.insert(lc)
 
-                            val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
-                            val editorX = spX.edit()
-                            editorX.putInt("nx", getDistrict?.x ?: 60)
-                            editorX.commit()
-
-                            val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
-                            val editorY = spY.edit()
-                            editorY.putInt("ny", getDistrict?.y ?: 127)
-                            editorY.commit()
+                            val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                            val editor = sp.edit()
+                            editor.putInt("nx", getDistrict?.x ?: 0)
+                            editor.putInt("ny", getDistrict?.y ?: 0)
+                            editor.commit()
                         }
                         Toast.makeText(application, "위치를 추가했습니다.", Toast.LENGTH_SHORT).show()
                     } else { // 수정으로 들어옴
@@ -671,11 +663,9 @@ class LocationActivity : AppCompatActivity() {
 
                             val id = intent.getLongExtra("id", -1)
 
-                            val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
-                            val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
-
-                            val nx = spX.getInt("nx", 0)
-                            val ny = spY.getInt("ny", 0)
+                            val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                            val nx = sp.getInt("nx", 0)
+                            val ny = sp.getInt("ny", 0)
 
                             var IscurrentLoc = false
                             val currentLoc = db.locDao.get(id)
@@ -695,15 +685,11 @@ class LocationActivity : AppCompatActivity() {
                             db.locDao.update(lc)
 
                             if (IscurrentLoc) {
-                                val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
-                                val editorX = spX.edit()
-                                editorX.putInt("nx", getDistrict?.x ?: 60)
-                                editorX.commit()
-
-                                val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
-                                val editorY = spY.edit()
-                                editorY.putInt("ny", getDistrict?.y ?: 127)
-                                editorY.commit()
+                                val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                                val editor = sp.edit()
+                                editor.putInt("nx", getDistrict?.x ?: 0)
+                                editor.putInt("ny", getDistrict?.y ?: 0)
+                                editor.commit()
                             }
                         }
                         Toast.makeText(application, "위치를 수정했습니다.", Toast.LENGTH_SHORT).show()

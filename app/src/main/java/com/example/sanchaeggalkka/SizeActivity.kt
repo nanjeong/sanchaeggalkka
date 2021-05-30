@@ -16,13 +16,11 @@ class SizeActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val sharedPreferences = getSharedPreferences("checkFirst", Context.MODE_PRIVATE)
-        val value = sharedPreferences.getBoolean("first", false)
-        if (!value) {
-            val editor = sharedPreferences.edit()
-            editor.putBoolean("first", true)
-            editor.commit()
+        val sharedPreferences = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+        val nx = sharedPreferences.getInt("nx", 0)
+        val ny = sharedPreferences.getInt("ny", 0)
 
+        if (nx == 0 && ny == 0) {
             val locationIntent = Intent(this, LocationActivity::class.java)
 
             startActivity(locationIntent)

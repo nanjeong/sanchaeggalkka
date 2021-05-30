@@ -43,35 +43,32 @@ class LocationListActivity : AppCompatActivity() {
             Toast.makeText(this, "$id", Toast.LENGTH_SHORT).show()
             viewModel.onLocationClicked(id)
         },
-        MoreListener { id ->
-            val balloon = Balloon.Builder(this)
-                .setLayout(R.layout.layout_more)
-                .setIsVisibleArrow(false)
-                .setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.balloon_background))
-                .build()
+            MoreListener { id ->
+                val balloon = Balloon.Builder(this)
+                    .setLayout(R.layout.layout_more)
+                    .setIsVisibleArrow(false)
+                    .setBackgroundDrawable(ContextCompat.getDrawable(this, R.drawable.balloon_background)
+                    )
+                    .build()
 
-            balloon.showAlignTop(binding.guide)
+                balloon.showAlignTop(binding.guide)
 
-            val setLocBtn: TextView = balloon.getContentView().findViewById(R.id.set_current_location)
-            val deleteBtn: TextView = balloon.getContentView().findViewById(R.id.delete)
+                val setLocBtn: TextView = balloon.getContentView().findViewById(R.id.set_current_location)
+                val deleteBtn: TextView = balloon.getContentView().findViewById(R.id.delete)
 
-            setLocBtn.setOnClickListener {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val clickedLoc = dataSource.get(id)
+                setLocBtn.setOnClickListener {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val clickedLoc = dataSource.get(id)
 
-                    val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
-                    val editorX = spX.edit()
-                    editorX.putInt("nx", clickedLoc.x)
-                    editorX.commit()
-
-                    val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
-                    val editorY = spY.edit()
-                    editorY.putInt("ny", clickedLoc.y)
-                    editorY.commit()
+                        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                        val editor = sp.edit()
+                        editor.putInt("nx", clickedLoc.x)
+                        editor.putInt("ny", clickedLoc.y)
+                        editor.commit()
+                    }
+                    balloon.dismiss()
+                    Toast.makeText(this, "현위치를 변경했습니다.", Toast.LENGTH_SHORT).show()
                 }
-                balloon.dismiss()
-                Toast.makeText(this, "현위치를 변경했습니다.", Toast.LENGTH_SHORT).show()
-            }
 
             deleteBtn.setOnClickListener {
                 balloon.dismiss()
@@ -81,26 +78,27 @@ class LocationListActivity : AppCompatActivity() {
                     CoroutineScope(Dispatchers.IO).launch {
                         val thisLocation = dataSource.get(id)
 
-                        val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
-                        val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
-
-                        val nx = spX.getInt("nx", 0)
-                        val ny = spY.getInt("ny", 0)
+                        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                        val editor = sp.edit()
+                        val nx = sp.getInt("nx", 0)
+                        val ny = sp.getInt("ny", 0)
 
                         if (thisLocation.x == nx && thisLocation.y == ny) {
                             CoroutineScope(Dispatchers.Main).launch {
                                 Toast.makeText(application, "현재 위치를 설정해주세요", Toast.LENGTH_SHORT).show()
                             }
+                            editor.putInt("nx", 0)
+                            editor.putInt("ny", 0)
                         }
                         dataSource.delete(thisLocation)
                     }
                 })
                 deleteDialog.setNegativeButton(R.string.cancel, DialogInterface.OnClickListener { _, _ ->
 
-                })
-                deleteDialog.create().show()
-            }
-        })
+                        })
+                    deleteDialog.create().show()
+                }
+            })
         binding.locationRecyclerview.adapter = adapter
 
         viewModel.locations.observe(this, Observer {
@@ -126,5 +124,10 @@ class LocationListActivity : AppCompatActivity() {
 
             startActivity(locationIntent)
         }
+
+        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+        val nx = sp.getInt("nx", 0)
+        val ny = sp.getInt("ny", 0)
+        Log.i("locationlistt", "nx: $nx, ny: $ny")
     }
 }

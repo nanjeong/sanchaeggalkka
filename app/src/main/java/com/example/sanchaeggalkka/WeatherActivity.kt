@@ -60,11 +60,9 @@ class WeatherActivity : AppCompatActivity() {
 
         val size = intent.getStringExtra("size")
 
-        val spX = getSharedPreferences("currentLocationX", Context.MODE_PRIVATE)
-        val spY = getSharedPreferences("currentLocationY", Context.MODE_PRIVATE)
-
-        val nx = spX.getInt("nx", 60)
-        val ny = spY.getInt("ny", 127)
+        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+        val nx = sp.getInt("nx", 0)
+        val ny = sp.getInt("ny", 0)
 
         val currTime = System.currentTimeMillis()
         val date = Date(currTime)
@@ -163,7 +161,7 @@ class WeatherActivity : AppCompatActivity() {
                 override fun onFailure(call: Call<WeatherForecast>, t: Throwable) {
                     Log.i("weather api", "fail ${t.message}")
                     Log.i("weather api", "nx: $nx, ny: $ny")
-                    showToast()
+                    showToast(nx, ny)
                 }
             })
 
@@ -238,7 +236,11 @@ class WeatherActivity : AppCompatActivity() {
         }
     }
 
-    private fun showToast() {
+    private fun showToast(nx: Int, ny: Int) {
+        if (nx == 0 && ny == 0) {
+            Toast.makeText(this, "위치 설정이 올바르지 않습니다. 위치를 다시 설정해주세요.", Toast.LENGTH_LONG).show()
+        } else {
         Toast.makeText(this, "날씨 정보를 가져오는데 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show()
+        }
     }
 }
