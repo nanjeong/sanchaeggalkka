@@ -63,6 +63,8 @@ class WeatherActivity : AppCompatActivity() {
         val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
         val nx = sp.getInt("nx", 0)
         val ny = sp.getInt("ny", 0)
+        val currName = sp.getString("currName", "")
+        binding.currName.text = currName
 
         val currTime = System.currentTimeMillis()
         val date = Date(currTime)
@@ -102,6 +104,7 @@ class WeatherActivity : AppCompatActivity() {
                     ResourcesCompat.getDrawable(resources, R.color.small_size, null)
                 binding.explain3.background =
                     ResourcesCompat.getDrawable(resources, R.color.small_size, null)
+                binding.currLocation.setImageResource(R.drawable.ic_checked_location_on_24)
             }
             "medium" -> {
                 binding.explain1.background =
@@ -110,6 +113,7 @@ class WeatherActivity : AppCompatActivity() {
                     ResourcesCompat.getDrawable(resources, R.color.medium_size, null)
                 binding.explain3.background =
                     ResourcesCompat.getDrawable(resources, R.color.medium_size, null)
+                binding.currLocation.setImageResource(R.drawable.ic_medium_location_on_24)
             }
             "large" -> {
                 binding.explain1.background =
@@ -118,6 +122,7 @@ class WeatherActivity : AppCompatActivity() {
                     ResourcesCompat.getDrawable(resources, R.color.large_size, null)
                 binding.explain3.background =
                     ResourcesCompat.getDrawable(resources, R.color.large_size, null)
+                binding.currLocation.setImageResource(R.drawable.ic_large_location_on_24)
             }
         }
 

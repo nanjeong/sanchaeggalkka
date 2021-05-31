@@ -69,6 +69,7 @@ class LocationListActivity : AppCompatActivity() {
 
                         val editor = sp.edit()
                         editor.putLong("currId", id)
+                        editor.putString("currName", clickedLoc.lcName)
                         editor.putInt("nx", clickedLoc.x)
                         editor.putInt("ny", clickedLoc.y)
                         editor.commit()
@@ -93,6 +94,7 @@ class LocationListActivity : AppCompatActivity() {
                             CoroutineScope(Dispatchers.Main).launch {
                                 Toast.makeText(application, "현재 위치를 설정해주세요", Toast.LENGTH_SHORT).show()
                             }
+                            editor.putString("currName", "위치를 설정해주세요.")
                             editor.putInt("nx", 0)
                             editor.putInt("ny", 0)
                         }

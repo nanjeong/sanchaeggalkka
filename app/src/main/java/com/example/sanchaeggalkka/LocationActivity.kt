@@ -612,6 +612,7 @@ class LocationActivity : AppCompatActivity() {
 
                         val editor = sp.edit()
                         editor.putLong("currId", lastId)
+                        editor.putString("currName", binding.locationName.text.toString())
                         editor.putInt("nx", getDistrict?.x ?: 0)
                         editor.putInt("ny", getDistrict?.y ?: 0)
                         editor.commit()
@@ -658,6 +659,7 @@ class LocationActivity : AppCompatActivity() {
 
                             val editor = sp.edit()
                             editor.putLong("currId", lastId)
+                            editor.putString("currName", binding.locationName.text.toString())
                             editor.putInt("nx", getDistrict?.x ?: 0)
                             editor.putInt("ny", getDistrict?.y ?: 0)
                             editor.commit()
@@ -689,6 +691,7 @@ class LocationActivity : AppCompatActivity() {
                             if (currId == selectedId) {
                                 val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
                                 val editor = sp.edit()
+                                editor.putString("currName", binding.locationName.text.toString())
                                 editor.putInt("nx", getDistrict?.x ?: 0)
                                 editor.putInt("ny", getDistrict?.y ?: 0)
                                 editor.commit()
