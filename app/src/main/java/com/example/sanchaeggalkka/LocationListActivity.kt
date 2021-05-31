@@ -5,7 +5,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -59,9 +58,17 @@ class LocationListActivity : AppCompatActivity() {
                 setLocBtn.setOnClickListener {
                     CoroutineScope(Dispatchers.IO).launch {
                         val clickedLoc = dataSource.get(id)
+                        clickedLoc.current = 1
+                        dataSource.update(clickedLoc)
 
                         val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                        val currId = sp.getLong("currId", 0)
+                        val currLoc = dataSource.get(currId)
+                        currLoc.current = 0
+                        dataSource.update(currLoc)
+
                         val editor = sp.edit()
+                        editor.putLong("currId", id)
                         editor.putInt("nx", clickedLoc.x)
                         editor.putInt("ny", clickedLoc.y)
                         editor.commit()
@@ -80,10 +87,9 @@ class LocationListActivity : AppCompatActivity() {
 
                         val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
                         val editor = sp.edit()
-                        val nx = sp.getInt("nx", 0)
-                        val ny = sp.getInt("ny", 0)
+                        val currId = sp.getLong("currId", 0)
 
-                        if (thisLocation.x == nx && thisLocation.y == ny) {
+                        if (currId == id) {
                             CoroutineScope(Dispatchers.Main).launch {
                                 Toast.makeText(application, "현재 위치를 설정해주세요", Toast.LENGTH_SHORT).show()
                             }
@@ -94,7 +100,6 @@ class LocationListActivity : AppCompatActivity() {
                     }
                 })
                 deleteDialog.setNegativeButton(R.string.cancel, DialogInterface.OnClickListener { _, _ ->
-
                         })
                     deleteDialog.create().show()
                 }
@@ -124,10 +129,5 @@ class LocationListActivity : AppCompatActivity() {
 
             startActivity(locationIntent)
         }
-
-        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
-        val nx = sp.getInt("nx", 0)
-        val ny = sp.getInt("ny", 0)
-        Log.i("locationlistt", "nx: $nx, ny: $ny")
     }
 }

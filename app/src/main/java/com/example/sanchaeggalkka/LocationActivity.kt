@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
-import androidx.lifecycle.ViewModelProvider
 import com.example.sanchaeggalkka.databinding.ActivityLocationBinding
 import com.example.sanchaeggalkka.db.AdministrativeDistrict
 import com.example.sanchaeggalkka.db.DistrictDatabase
@@ -28,7 +27,6 @@ class LocationActivity : AppCompatActivity() {
 
         val selectedDistrict: Array<String> = Array(3) { "" }
         var district: List<AdministrativeDistrict> = listOf()
-        val lcName = findViewById<EditText>(R.id.location_name)
         val application = requireNotNull(this).application
         val db = DistrictDatabase.getInstance(application)
 
@@ -578,8 +576,7 @@ class LocationActivity : AppCompatActivity() {
                     id: Long
                 ) {
                     selectedDistrict[2] = binding.dong.getItemAtPosition(position) as String
-                    if (binding.dong.getItemAtPosition(position) == "읍/면/동") selectedDistrict[2] =
-                        ""
+                    if (binding.dong.getItemAtPosition(position) == "읍/면/동") selectedDistrict[2] = ""
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -589,7 +586,7 @@ class LocationActivity : AppCompatActivity() {
             binding.nextButton.setOnClickListener {
                 if (selectedDistrict[0] == "") {
                     Toast.makeText(application, "위치를 설정해주세요", Toast.LENGTH_SHORT).show()
-                } else if (lcName.text.toString() == "") {
+                } else if (binding.locationName.text.toString() == "") {
                     Toast.makeText(application, "위치 이름을 작성해주세요.", Toast.LENGTH_SHORT).show()
                 } else {
                     CoroutineScope(Dispatchers.IO).launch {
@@ -599,8 +596,10 @@ class LocationActivity : AppCompatActivity() {
                             selectedDistrict[2]
                         )
 
+                        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+
                         val lc = Loc(
-                            lcName = lcName.text.toString(),
+                            lcName = binding.locationName.text.toString(),
                             name1 = selectedDistrict[0],
                             name2 = selectedDistrict[1],
                             name3 = selectedDistrict[2],
@@ -609,8 +608,10 @@ class LocationActivity : AppCompatActivity() {
                         )
                         db.locDao.insert(lc)
 
-                        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                        val lastId = db.locDao.getLast().id
+
                         val editor = sp.edit()
+                        editor.putLong("currId", lastId)
                         editor.putInt("nx", getDistrict?.x ?: 0)
                         editor.putInt("ny", getDistrict?.y ?: 0)
                         editor.commit()
@@ -625,7 +626,7 @@ class LocationActivity : AppCompatActivity() {
             binding.saveButton.setOnClickListener {
                 if (selectedDistrict[0] == "") {
                     Toast.makeText(application, "위치를 설정해주세요", Toast.LENGTH_SHORT).show()
-                } else if (lcName.text.toString() == "") {
+                } else if (binding.locationName.text.toString() == "") {
                     Toast.makeText(application, "위치 이름을 작성해주세요.", Toast.LENGTH_SHORT).show()
                 } else {
                     if (start == "locationList") { // ADD로 들어옴
@@ -636,8 +637,15 @@ class LocationActivity : AppCompatActivity() {
                                 selectedDistrict[2]
                             )
 
+                            val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                            val currId = sp.getLong("currId", 0)
+
+                            val currLoc = db.locDao.get(currId)
+                            currLoc.current = 0
+                            db.locDao.update(currLoc)
+
                             val lc = Loc(
-                                lcName = lcName.text.toString(),
+                                lcName = binding.locationName.text.toString(),
                                 name1 = selectedDistrict[0],
                                 name2 = selectedDistrict[1],
                                 name3 = selectedDistrict[2],
@@ -646,14 +654,16 @@ class LocationActivity : AppCompatActivity() {
                             )
                             db.locDao.insert(lc)
 
-                            val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                            val lastId = db.locDao.getLast().id
+
                             val editor = sp.edit()
+                            editor.putLong("currId", lastId)
                             editor.putInt("nx", getDistrict?.x ?: 0)
                             editor.putInt("ny", getDistrict?.y ?: 0)
                             editor.commit()
                         }
                         Toast.makeText(application, "위치를 추가했습니다.", Toast.LENGTH_SHORT).show()
-                    } else { // 수정으로 들어옴
+                    } else if (start == "locationDetail"){ // 수정으로 들어옴
                         CoroutineScope(Dispatchers.IO).launch {
                             val getDistrict = db.districtDao.get(
                                 selectedDistrict[0],
@@ -661,30 +671,22 @@ class LocationActivity : AppCompatActivity() {
                                 selectedDistrict[2]
                             )
 
-                            val id = intent.getLongExtra("id", -1)
+                            val selectedId = intent.getLongExtra("id", -1)
 
                             val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
-                            val nx = sp.getInt("nx", 0)
-                            val ny = sp.getInt("ny", 0)
+                            val currId = sp.getLong("currId", 0)
 
-                            var IscurrentLoc = false
-                            val currentLoc = db.locDao.get(id)
-                            if (currentLoc.x == nx && currentLoc.y == ny) {
-                                IscurrentLoc = true
-                            }
+                            val selectedLoc = db.locDao.get(selectedId)
+                            selectedLoc.lcName = binding.locationName.text.toString()
+                            selectedLoc.name1 = selectedDistrict[0]
+                            selectedLoc.name2 = selectedDistrict[1]
+                            selectedLoc.name3 = selectedDistrict[2]
+                            selectedLoc.x = getDistrict?.x ?: 60
+                            selectedLoc.y = getDistrict?.y ?: 127
 
-                            val lc = Loc(
-                                id,
-                                lcName.text.toString(),
-                                selectedDistrict[0],
-                                selectedDistrict[1],
-                                selectedDistrict[2],
-                                getDistrict?.x ?: 60,
-                                getDistrict?.y ?: 127
-                            )
-                            db.locDao.update(lc)
+                            db.locDao.update(selectedLoc)
 
-                            if (IscurrentLoc) {
+                            if (currId == selectedId) {
                                 val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
                                 val editor = sp.edit()
                                 editor.putInt("nx", getDistrict?.x ?: 0)

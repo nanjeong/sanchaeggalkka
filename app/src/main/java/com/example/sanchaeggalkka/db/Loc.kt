@@ -7,10 +7,11 @@ import androidx.room.PrimaryKey
 data class Loc(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0L,
-    val lcName: String,
-    val name1: String,
-    val name2: String,
-    val name3: String,
-    val x: Int,
-    val y: Int
+    var lcName: String,
+    var name1: String,
+    var name2: String,
+    var name3: String,
+    var x: Int,
+    var y: Int,
+    var current: Int = 1
 )

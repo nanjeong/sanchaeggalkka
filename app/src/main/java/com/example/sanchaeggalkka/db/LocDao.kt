@@ -17,6 +17,9 @@ interface LocDao {
     @Query("SELECT * FROM location_table WHERE id = :key")
     suspend fun get(key: Long): Loc
 
+    @Query("SELECT * FROM location_table ORDER BY id DESC LIMIT 1")
+    suspend fun getLast(): Loc
+
     @Query("SELECT lcName FROM location_table")
     fun getName(): LiveData<List<String>>
 
