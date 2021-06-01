@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.lifecycle.ViewModelProvider
 import com.example.sanchaeggalkka.databinding.ActivityWeatherBinding
 import com.skydoves.balloon.*
 import retrofit2.Call
@@ -22,6 +23,7 @@ import java.util.*
 class WeatherActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityWeatherBinding
+    private lateinit var size: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,43 +60,7 @@ class WeatherActivity : AppCompatActivity() {
             editor.commit()
         }
 
-        val size = intent.getStringExtra("size")
-
-        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
-        val nx = sp.getInt("nx", 0)
-        val ny = sp.getInt("ny", 0)
-        val currName = sp.getString("currName", "")
-        binding.currName.text = currName
-
-        val currTime = System.currentTimeMillis()
-        val date = Date(currTime)
-        val today = SimpleDateFormat("yyyyMMdd HH").format(date)
-        val calendar = GregorianCalendar(Locale.KOREA)
-        calendar.time = SimpleDateFormat("yyyyMMdd").parse(today)
-        calendar.add(Calendar.DATE, -1)
-        val yesterday = SimpleDateFormat("yyyyMMdd").format(calendar.time)
-        Log.i("date", "today: $today yesterday: $yesterday")
-
-        var baseDate = today.split(" ")[0]
-        var baseTime: String
-        when (today.split(" ")[1]) {
-            "05", "06", "07" -> baseTime = "0200"
-            "08", "09", "10" -> baseTime = "0500"
-            "11", "12", "13" -> baseTime = "0800"
-            "14", "15", "16" -> baseTime = "1100"
-            "17", "18", "19" -> baseTime = "1400"
-            "20", "21", "22" -> baseTime = "1700"
-            "23" -> baseTime = "2000"
-            "00", "01" -> {
-                baseTime = "2000"
-                baseDate = yesterday
-            }
-            "02", "03", "04" -> {
-                baseTime = "2300"
-                baseDate = yesterday
-            }
-            else -> baseTime = ""
-        }
+        size = intent.getStringExtra("size") ?: "small"
 
         when (size) {
             "small" -> {
@@ -125,50 +91,6 @@ class WeatherActivity : AppCompatActivity() {
                 binding.currLocation.setImageResource(R.drawable.ic_large_location_on_24)
             }
         }
-
-        val retrofit = Retrofit.Builder()
-            .baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val service = retrofit.create(WeatherInterface::class.java)
-
-        service.getWeather(10, 1, "JSON", baseDate, baseTime, nx.toString(), ny.toString())
-            .enqueue(object : Callback<WeatherForecast> {
-                override fun onResponse(
-                    call: Call<WeatherForecast>,
-                    response: Response<WeatherForecast>
-                ) {
-                    if (response.isSuccessful) {
-                        val weatherInf = response.body()?.response?.body?.items?.item
-                        var temperature = 80
-                        var rain = -1
-                        if (weatherInf != null) {
-                            for (info in weatherInf) {
-                                if (info.category == "T3H") temperature = info.fcstValue.toInt()
-                                if (info.category == "PTY") rain = info.fcstValue.toInt()
-                            }
-                        }
-                        if (temperature != 80 && size != null) {
-                            showInformation(temperature, size)
-                            binding.rain.text = when (rain) {
-                                1 -> "강수형태: 비"
-                                2 -> "강수형태: 진눈깨비"
-                                3 -> "강수형태: 눈"
-                                4 -> "강수형태: 소나기"
-                                5 -> "강수형태: 빗방울"
-                                6 -> "강수형태: 빗방울/눈날림"
-                                else -> ""
-                            }
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<WeatherForecast>, t: Throwable) {
-                    Log.i("weather api", "fail ${t.message}")
-                    Log.i("weather api", "nx: $nx, ny: $ny")
-                    showToast(nx, ny)
-                }
-            })
 
         binding.location.setOnClickListener {
             val lcIntent = Intent(this, LocationListActivity::class.java)
@@ -247,5 +169,89 @@ class WeatherActivity : AppCompatActivity() {
         } else {
         Toast.makeText(this, "날씨 정보를 가져오는데 실패했습니다. 다시 시도해주세요.", Toast.LENGTH_LONG).show()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+        val nx = sp.getInt("nx", 0)
+        val ny = sp.getInt("ny", 0)
+        val currName = sp.getString("currName", "") ?: ""
+
+        binding.currentName.text = currName
+
+        val currTime = System.currentTimeMillis()
+        val date = Date(currTime)
+        val today = SimpleDateFormat("yyyyMMdd HH").format(date)
+        val calendar = GregorianCalendar(Locale.KOREA)
+        calendar.time = SimpleDateFormat("yyyyMMdd").parse(today)
+        calendar.add(Calendar.DATE, -1)
+        val yesterday = SimpleDateFormat("yyyyMMdd").format(calendar.time)
+        Log.i("date", "today: $today yesterday: $yesterday")
+
+        var baseDate = today.split(" ")[0]
+        var baseTime: String
+        when (today.split(" ")[1]) {
+            "05", "06", "07" -> baseTime = "0200"
+            "08", "09", "10" -> baseTime = "0500"
+            "11", "12", "13" -> baseTime = "0800"
+            "14", "15", "16" -> baseTime = "1100"
+            "17", "18", "19" -> baseTime = "1400"
+            "20", "21", "22" -> baseTime = "1700"
+            "23" -> baseTime = "2000"
+            "00", "01" -> {
+                baseTime = "2000"
+                baseDate = yesterday
+            }
+            "02", "03", "04" -> {
+                baseTime = "2300"
+                baseDate = yesterday
+            }
+            else -> baseTime = ""
+        }
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("http://apis.data.go.kr/1360000/VilageFcstInfoService/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val service = retrofit.create(WeatherInterface::class.java)
+
+        service.getWeather(10, 1, "JSON", baseDate, baseTime, nx.toString(), ny.toString())
+            .enqueue(object : Callback<WeatherForecast> {
+                override fun onResponse(
+                    call: Call<WeatherForecast>,
+                    response: Response<WeatherForecast>
+                ) {
+                    if (response.isSuccessful) {
+                        val weatherInf = response.body()?.response?.body?.items?.item
+                        var temperature = 80
+                        var rain = -1
+                        if (weatherInf != null) {
+                            for (info in weatherInf) {
+                                if (info.category == "T3H") temperature = info.fcstValue.toInt()
+                                if (info.category == "PTY") rain = info.fcstValue.toInt()
+                            }
+                        }
+                        if (temperature != 80 && size != null) {
+                            showInformation(temperature, size)
+                            binding.rain.text = when (rain) {
+                                1 -> "강수형태: 비"
+                                2 -> "강수형태: 진눈깨비"
+                                3 -> "강수형태: 눈"
+                                4 -> "강수형태: 소나기"
+                                5 -> "강수형태: 빗방울"
+                                6 -> "강수형태: 빗방울/눈날림"
+                                else -> ""
+                            }
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<WeatherForecast>, t: Throwable) {
+                    Log.i("weather api", "fail ${t.message}")
+                    Log.i("weather api", "nx: $nx, ny: $ny")
+                    showToast(nx, ny)
+                }
+            })
     }
 }

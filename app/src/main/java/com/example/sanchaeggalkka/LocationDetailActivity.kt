@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 class LocationDetailActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLocationDetailBinding
+    private var locationId: Long = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,9 +20,15 @@ class LocationDetailActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        locationId = intent.getLongExtra("id", 0L)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+
         val application = requireNotNull(this).application
         val db = DistrictDatabase.getInstance(application).locDao
-        val locationId = intent.getLongExtra("id", 0L)
 
         CoroutineScope(Dispatchers.IO).launch {
             val thisLocation = db.get(locationId)

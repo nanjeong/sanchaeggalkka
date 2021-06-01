@@ -38,11 +38,11 @@
             android:id="@+id/currLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@id/currName"
-            app:layout_constraintEnd_toStartOf="@id/currName" />
+            app:layout_constraintBottom_toBottomOf="@id/current_name"
+            app:layout_constraintEnd_toStartOf="@id/current_name" />
 
         <TextView
-            android:id="@+id/currName"
+            android:id="@+id/current_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="6dp"

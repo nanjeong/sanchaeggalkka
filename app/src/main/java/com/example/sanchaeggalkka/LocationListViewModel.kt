@@ -16,10 +16,6 @@ class LocationListViewModel(dataSource: LocDao, application: Application) :
         _navigateToLocationDetail.value = id
     }
 
-//    fun onLocationDetailNavigated() {
-//        _navigateToLocationDetail.value = null
-//    }
-
     private val _navigateToLocationDetail = MutableLiveData<Long?>()
     val navigateToLocationDetail
         get() = _navigateToLocationDetail
