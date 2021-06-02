@@ -16,16 +16,6 @@ class SizeActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val sharedPreferences = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
-        val nx = sharedPreferences.getInt("nx", 0)
-        val ny = sharedPreferences.getInt("ny", 0)
-
-        if (nx == 0 && ny == 0) {
-            val locationIntent = Intent(this, LocationActivity::class.java)
-
-            startActivity(locationIntent)
-        }
-
         binding.small.setOnClickListener {
             val smallIntent = Intent(this, WeatherActivity::class.java)
 
@@ -51,4 +41,16 @@ class SizeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        val sharedPreferences = getSharedPreferences("visitFirst", Context.MODE_PRIVATE)
+        val value = sharedPreferences.getBoolean("first", true)
+
+        if (value) {
+            val locationIntent = Intent(this, LocationActivity::class.java)
+
+            startActivity(locationIntent)
+        }
+    }
 }

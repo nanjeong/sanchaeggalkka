@@ -39,7 +39,7 @@ class LocationListActivity : AppCompatActivity() {
         binding.locationListViewModel = viewModel
 
         val adapter = LocationAdapter(LocationListener { id ->
-            Toast.makeText(this, "$id", Toast.LENGTH_SHORT).show()
+
             viewModel.onLocationClicked(id)
         },
             MoreListener { id ->
@@ -63,9 +63,12 @@ class LocationListActivity : AppCompatActivity() {
 
                         val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
                         val currId = sp.getLong("currId", 0)
-                        val currLoc = dataSource.get(currId)
-                        currLoc.current = 0
-                        dataSource.update(currLoc)
+
+                        if (currId != 0L) {
+                            val currLoc = dataSource.get(currId)
+                            currLoc.current = 0
+                            dataSource.update(currLoc)
+                        }
 
                         val editor = sp.edit()
                         editor.putLong("currId", id)
@@ -94,9 +97,11 @@ class LocationListActivity : AppCompatActivity() {
                             CoroutineScope(Dispatchers.Main).launch {
                                 Toast.makeText(application, "현재 위치를 설정해주세요", Toast.LENGTH_SHORT).show()
                             }
-                            editor.putString("currName", "위치를 설정해주세요.")
+                            editor.putLong("currId", 0L)
+                            editor.putString("currName", "위치를 설정해주세요. 기본 위치: 서울")
                             editor.putInt("nx", 0)
                             editor.putInt("ny", 0)
+                            editor.commit()
                         }
                         dataSource.delete(thisLocation)
                     }

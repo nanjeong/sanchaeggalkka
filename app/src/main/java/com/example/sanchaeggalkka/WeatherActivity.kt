@@ -51,12 +51,13 @@ class WeatherActivity : AppCompatActivity() {
         }
 
         val sharedPreferences = getSharedPreferences("visitFirst", Context.MODE_PRIVATE)
-        val value = sharedPreferences.getBoolean("first", false)
-        if (!value) {
+        val value = sharedPreferences.getBoolean("first", true)
+
+        if (value) {
             balloon.showAlignBottom(binding.info)
 
             val editor = sharedPreferences.edit()
-            editor.putBoolean("first", true)
+            editor.putBoolean("first", false)
             editor.commit()
         }
 
@@ -174,8 +175,8 @@ class WeatherActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
-        val nx = sp.getInt("nx", 0)
-        val ny = sp.getInt("ny", 0)
+        val nx = sp.getInt("nx", 60)
+        val ny = sp.getInt("ny", 127)
         val currName = sp.getString("currName", "") ?: ""
 
         binding.currentName.text = currName
