@@ -1,7 +1,6 @@
 package com.example.sanchaeggalkka
 
 import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -18,6 +17,7 @@ import kotlinx.coroutines.launch
 class LocationActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLocationBinding
+    private lateinit var start: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,7 +30,7 @@ class LocationActivity : AppCompatActivity() {
         val application = requireNotNull(this).application
         val db = DistrictDatabase.getInstance(application)
 
-        val start = intent.getStringExtra("start")
+        start = intent.getStringExtra("start") ?: ""
 
         if (start == "locationList" || start == "locationDetail") {
             binding.nextButton.visibility = View.INVISIBLE
@@ -46,7 +46,7 @@ class LocationActivity : AppCompatActivity() {
             val lcName = intent.getStringExtra("lcName")
 
             lcName?.let {
-                binding.locationName.setText(lcName)
+                binding.locationName.setText(it)
             }
         }
 
@@ -64,6 +64,14 @@ class LocationActivity : AppCompatActivity() {
             ).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 binding.superDistrict.adapter = adapter
+            }
+
+            if (start == "locationDetail") {
+                val name1 = intent.getStringExtra("name1") ?: ""
+
+                if (name1 != "") {
+                    binding.superDistrict.setSelection(getIndex(binding.superDistrict, name1))
+                }
             }
 
             binding.superDistrict.onItemSelectedListener =
@@ -718,18 +726,34 @@ class LocationActivity : AppCompatActivity() {
         }
 
         setMuAdapter(R.array.mu)
+
+        if (start == "locationDetail") {
+            val name2 = intent.getStringExtra("name2") ?: ""
+
+            if (name2 != "") {
+                binding.sigungu.setSelection(getIndex(binding.sigungu, name2))
+            }
+        }
     }
 
-    private fun setDongAdapter(start: Int, end: Int, district: List<AdministrativeDistrict>) {
+    private fun setDongAdapter(strt: Int, end: Int, district: List<AdministrativeDistrict>) {
         val dongArray = ArrayList<String>()
         dongArray.add("읍/면/동")
-        for (i in start..end) {
+        for (i in strt..end) {
             dongArray.add(district[i].name3)
         }
 
         val arrayAdapter =
             ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, dongArray)
         binding.dong.adapter = arrayAdapter
+
+        if (start == "locationDetail") {
+            val name3 = intent.getStringExtra("name3") ?: ""
+            
+            if (name3 != "") {
+                binding.dong.setSelection(getIndex(binding.dong, name3))
+            }
+        }
     }
 
     private fun setMuAdapter(array: Int) {
@@ -741,5 +765,14 @@ class LocationActivity : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             binding.dong.adapter = adapter
         }
+    }
+
+    private fun getIndex(spinner: Spinner, name: String): Int {
+        for (i in 0 until spinner.count) {
+            if (spinner.getItemAtPosition(i).toString() == name) {
+                return i
+            }
+        }
+        return 0
     }
 }

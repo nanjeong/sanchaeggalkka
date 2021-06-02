@@ -45,6 +45,9 @@ class LocationDetailActivity : AppCompatActivity() {
                     updateIntent.putExtra("start", "locationDetail")
                     updateIntent.putExtra("lcName", thisLocation.lcName)
                     updateIntent.putExtra("id", locationId)
+                    updateIntent.putExtra("name1", thisLocation.name1)
+                    updateIntent.putExtra("name2", thisLocation.name2)
+                    updateIntent.putExtra("name3", thisLocation.name3)
 
                     startActivity(updateIntent)
                 }
