@@ -617,9 +617,10 @@ class LocationActivity : AppCompatActivity() {
                         editor.putInt("ny", getDistrict?.y ?: 0)
                         editor.commit()
 
-                        val sizeIntent = Intent(application, SizeActivity::class.java)
-
-                        startActivity(sizeIntent)
+//                        val sizeIntent = Intent(application, SizeActivity::class.java)
+//
+//                        startActivity(sizeIntent)
+                        finish()
                     }
                 }
             }
@@ -665,6 +666,7 @@ class LocationActivity : AppCompatActivity() {
                             editor.commit()
                         }
                         Toast.makeText(application, "위치를 추가했습니다.", Toast.LENGTH_SHORT).show()
+                        finish()
                     } else if (start == "locationDetail"){ // 수정으로 들어옴
                         CoroutineScope(Dispatchers.IO).launch {
                             val getDistrict = db.districtDao.get(
@@ -698,6 +700,7 @@ class LocationActivity : AppCompatActivity() {
                             }
                         }
                         Toast.makeText(application, "위치를 수정했습니다.", Toast.LENGTH_SHORT).show()
+                        finish()
                     }
                 }
             }

@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface WeatherInterface {
 
-    @GET("getVilageFcst?serviceKey=인증키")
+    @GET("getVilageFcst?serviceKey=${BuildConfig.WEATHER_API_KEY}")
     fun getWeather(
         @Query("numOfRows") numOfRows: Int,
         @Query("pageNo") pageNo: Int,
