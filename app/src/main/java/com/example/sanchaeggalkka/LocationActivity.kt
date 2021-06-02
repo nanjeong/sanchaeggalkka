@@ -228,7 +228,7 @@ class LocationActivity : AppCompatActivity() {
                                     binding.sigungu.getItemAtPosition(position) as String
                                 selectedDistrict[2] = ""
                                 when (binding.sigungu.getItemAtPosition(position)) {
-                                    "동구" -> setDongAdapter(991, 1004, district)
+                                    "동구" -> setDongAdapter(992, 1004, district)
                                     "서구" -> setDongAdapter(1006, 1023, district)
                                     "남구" -> setDongAdapter(1025, 1040, district)
                                     "북구" -> setDongAdapter(1042, 1069, district)
