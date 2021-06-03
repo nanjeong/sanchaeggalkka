@@ -1,7 +1,7 @@
 # 산책갈까
 
   
-<img height="20%" width="20%" src="https://user-images.githubusercontent.com/62249058/120661189-02d34880-c4c3-11eb-9122-199c7d505ddf.gif" />  
+<p align="center"><img height="30%" width="30%" src="https://user-images.githubusercontent.com/62249058/120661189-02d34880-c4c3-11eb-9122-199c7d505ddf.gif" /></p>  
 
 **간단한 소개**  
 강아지와 산책하기 적당한 기온인지 알려주는 앱
