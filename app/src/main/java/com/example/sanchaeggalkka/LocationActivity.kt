@@ -25,11 +25,6 @@ class LocationActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        val sharedPreferences = getSharedPreferences("visitFirst", Context.MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("first", false)
-        editor.commit()
-
         val selectedDistrict: Array<String> = Array(3) { "" }
         var district: List<AdministrativeDistrict> = listOf()
         val application = requireNotNull(this).application
@@ -629,12 +624,13 @@ class LocationActivity : AppCompatActivity() {
                         editor.putInt("nx", getDistrict?.x ?: 0)
                         editor.putInt("ny", getDistrict?.y ?: 0)
                         editor.commit()
-
-//                        val sizeIntent = Intent(application, SizeActivity::class.java)
-//
-//                        startActivity(sizeIntent)
-                        finish()
                     }
+                    val sharedPreferences = getSharedPreferences("visitFirst", Context.MODE_PRIVATE)
+                    val editor = sharedPreferences.edit()
+                    editor.putBoolean("first", false)
+                    editor.commit()
+
+                    finish()
                 }
             }
 

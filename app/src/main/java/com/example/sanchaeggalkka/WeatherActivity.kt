@@ -51,13 +51,13 @@ class WeatherActivity : AppCompatActivity() {
         }
 
         val sharedPreferences = getSharedPreferences("visitFirst", Context.MODE_PRIVATE)
-        val value = sharedPreferences.getBoolean("first", true)
+        val value = sharedPreferences.getBoolean("weatherFirst", true)
 
         if (value) {
             balloon.showAlignBottom(binding.info)
 
             val editor = sharedPreferences.edit()
-            editor.putBoolean("first", false)
+            editor.putBoolean("weatherFirst", false)
             editor.commit()
         }
 
@@ -177,8 +177,11 @@ class WeatherActivity : AppCompatActivity() {
         val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
         val nx = sp.getInt("nx", 60)
         val ny = sp.getInt("ny", 127)
-        val currName = sp.getString("currName", "") ?: ""
+        var currName = sp.getString("currName", "") ?: ""
 
+        if (currName == "") {
+            currName = "현재 위치를 설정해주세요. 기본 위치: 서울"
+        }
         binding.currentName.text = currName
 
         val currTime = System.currentTimeMillis()
