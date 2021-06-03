@@ -39,9 +39,7 @@ class LocationListActivity : AppCompatActivity() {
         binding.locationListViewModel = viewModel
 
         val adapter = LocationAdapter(LocationListener { id ->
-
-            viewModel.onLocationClicked(id)
-        },
+            viewModel.onLocationClicked(id) },
             MoreListener { id ->
                 val balloon = Balloon.Builder(this)
                     .setLayout(R.layout.layout_more)
@@ -81,33 +79,33 @@ class LocationListActivity : AppCompatActivity() {
                     Toast.makeText(this, "현위치를 변경했습니다.", Toast.LENGTH_SHORT).show()
                 }
 
-            deleteBtn.setOnClickListener {
-                balloon.dismiss()
-                val deleteDialog = AlertDialog.Builder(this)
-                deleteDialog.setMessage(R.string.dialog_delete)
-                deleteDialog.setPositiveButton(R.string.delete, DialogInterface.OnClickListener { _, _ ->
-                    CoroutineScope(Dispatchers.IO).launch {
-                        val thisLocation = dataSource.get(id)
+                deleteBtn.setOnClickListener {
+                    balloon.dismiss()
+                    val deleteDialog = AlertDialog.Builder(this)
+                    deleteDialog.setMessage(R.string.dialog_delete)
+                    deleteDialog.setPositiveButton(R.string.delete, DialogInterface.OnClickListener { _, _ ->
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val thisLocation = dataSource.get(id)
 
-                        val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
-                        val editor = sp.edit()
-                        val currId = sp.getLong("currId", 0)
+                            val sp = getSharedPreferences("currentLocation", Context.MODE_PRIVATE)
+                            val editor = sp.edit()
+                            val currId = sp.getLong("currId", 0)
 
-                        if (currId == id) {
-                            CoroutineScope(Dispatchers.Main).launch {
-                                Toast.makeText(application, "현재 위치를 설정해주세요", Toast.LENGTH_SHORT).show()
+                            if (currId == id) {
+                                CoroutineScope(Dispatchers.Main).launch {
+                                    Toast.makeText(application, "현재 위치를 설정해주세요", Toast.LENGTH_SHORT).show()
+                                }
+
+                                editor.putLong("currId", 0L)
+                                editor.putString("currName", "위치를 설정해주세요. 기본 위치: 서울")
+                                editor.putInt("nx", 0)
+                                editor.putInt("ny", 0)
+                                editor.commit()
                             }
-                            editor.putLong("currId", 0L)
-                            editor.putString("currName", "위치를 설정해주세요. 기본 위치: 서울")
-                            editor.putInt("nx", 0)
-                            editor.putInt("ny", 0)
-                            editor.commit()
+                            dataSource.delete(thisLocation)
                         }
-                        dataSource.delete(thisLocation)
-                    }
-                })
-                deleteDialog.setNegativeButton(R.string.cancel, DialogInterface.OnClickListener { _, _ ->
-                        })
+                    })
+                    deleteDialog.setNegativeButton(R.string.cancel, DialogInterface.OnClickListener { _, _ -> })
                     deleteDialog.create().show()
                 }
             })
